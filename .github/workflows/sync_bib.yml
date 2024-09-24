@@ -1,0 +1,38 @@
+name: Sync Bibliography
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  sync-bib:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout this repository
+      - name: Checkout publications repo
+        uses: actions/checkout@v4
+
+      # Copy alimk.bib to horotat.github.io/_bibliography as references.bib
+      - name: Push to horotat.github.io
+        run: |
+          git clone https://github.com/horotat/horotat.github.io.git
+          cp alimk.bib horotat.github.io/_bibliography/references.bib
+          cd horotat.github.io
+          git config --global user.email "alimk@kth.se"
+          git config --global user.name "Publications Repo"
+          git add _bibliography/references.bib
+          git commit -m "Update references.bib from publications"
+          git push
+
+      # Copy alimk.bib to cv as alimk_publications.bib
+      - name: Push to cv repo
+        run: |
+          git clone https://github.com/horotat/cv.git
+          cp alimk.bib cv/alimk_publications.bib
+          cd cv
+          git config --global user.email "alimk@kth.se"
+          git config --global user.name "Publications Repo"
+          git add alimk_publications.bib
+          git commit -m "Update alimk_publications.bib from publications"
+          git push
