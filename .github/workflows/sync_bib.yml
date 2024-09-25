@@ -15,24 +15,28 @@ jobs:
 
       # Copy alimk.bib to horotat.github.io/_bibliography as references.bib
       - name: Push to horotat.github.io
+        env:
+          PAT_TOKEN: ${{ secrets.BIB_SYNC }}
         run: |
-          git clone https://github.com/horotat/horotat.github.io.git
+          git clone https://$PAT_TOKEN@github.com/horotat/horotat.github.io.git
           cp alimk.bib horotat.github.io/_bibliography/references.bib
           cd horotat.github.io
           git config --global user.email "alimk@kth.se"
           git config --global user.name "Publications Repo"
           git add _bibliography/references.bib
           git commit -m "Update references.bib from publications"
-          git push
+          git push https://$PAT_TOKEN@github.com/horotat/horotat.github.io.git
 
       # Copy alimk.bib to cv as alimk_publications.bib
       - name: Push to cv repo
+        env:
+          PAT_TOKEN: ${{ secrets.BIB_SYNC }}
         run: |
-          git clone https://github.com/horotat/cv.git
+          git clone https://$PAT_TOKEN@github.com/horotat/cv.git
           cp alimk.bib cv/alimk_publications.bib
           cd cv
           git config --global user.email "alimk@kth.se"
           git config --global user.name "Publications Repo"
           git add alimk_publications.bib
           git commit -m "Update alimk_publications.bib from publications"
-          git push
+          git push https://$PAT_TOKEN@github.com/horotat/cv.git
